@@ -11,12 +11,12 @@ Created on Thu May 21 21:27:25 2015
 
 @author: desa
 """
-from ROOT import *
+#from ROOT import *
 import numpy as np
 from duck import spher_2_cart, cart_2_spher
 from duck_geometry_np import initialize_detector, initialize_particle, is_particle_geometrically_detected
 
-
+"""
 hist1 = TH2F('hist1', 'E(10B) - theta(10B)' ,1024, -10, 190, 1024, -10, 90)
 hist1.SetOption("COLZ")
 hist2 = TH2F('hist2', 'E(6Li) - theta(6Li)' ,1024, -10, 190, 1024, -10, 90)
@@ -27,6 +27,7 @@ hist4 = TH2F('hist3', 'theta(10B) - theta(10B)', 1024, -20, 200, 1024, -20, 200)
 hist4.SetOption("COLZ")
 hist5 = TH2F('hist1', 'E(6Li) - E(4He)' ,1024, -10, 90, 1024, -10, 90)
 hist5.SetOption("COLZ")
+"""
 
 
 
@@ -133,7 +134,7 @@ def is_2particle_event_detected(detectors, theta_X, phi_X, Q_1, E_12, E_p, m_p, 
     theta_E_lab =  np.arccos((np.sqrt(E_E) * np.cos(theta_E) + a_E) / (np.sqrt(E_E + 2.0 * np.sqrt(E_E) * a_E * np.cos(theta_E) + a_E * a_E)))       
     phi_E_lab = phi_E
     
-    hist4.Fill(np.rad2deg(theta_E_lab), np.rad2deg(theta_X_lab)) 
+    #hist4.Fill(np.rad2deg(theta_E_lab), np.rad2deg(theta_X_lab)) 
     """
     RASPAD X -> C + D
     slucajno odabiremo theta, phi za cesticu C
@@ -187,7 +188,7 @@ def is_2particle_event_detected(detectors, theta_X, phi_X, Q_1, E_12, E_p, m_p, 
     v_C_lab_spher =  cart_2_spher(v_C_lab_cart[0], v_C_lab_cart[1], v_C_lab_cart[2])      
         
     #print "thetaC_lab, phiC_lab", np.rad2deg(v_C_lab_spher[1]), np.rad2deg(v_C_lab_spher[2])
-    hist2.Fill(np.rad2deg(v_C_lab_spher[1]), E_C_lab)  
+    #hist2.Fill(np.rad2deg(v_C_lab_spher[1]), E_C_lab)  
     
     """
     PARAMETRI KOJI NAM TREBAJU SU E_C_lab, theta_C_lab, phi_C_lab
@@ -208,11 +209,11 @@ def is_2particle_event_detected(detectors, theta_X, phi_X, Q_1, E_12, E_p, m_p, 
    
     #print "thetaD_lab, phiD_lab", np.rad2deg(v_D_lab_spher[1]), np.rad2deg(v_D_lab_spher[2])     
     
-    hist1.Fill(np.rad2deg(theta_X_lab), E_X_lab)
+    #hist1.Fill(np.rad2deg(theta_X_lab), E_X_lab)
     #hist3.Fill(np.rad2deg(v_D_lab_spher[2]), np.rad2deg(v_C_lab_spher[2])) 
-    hist3.Fill(np.rad2deg(phi_X_lab), np.rad2deg(phi_E_lab))
+    #hist3.Fill(np.rad2deg(phi_X_lab), np.rad2deg(phi_E_lab))
     
-    hist5.Fill(E_D_lab, E_C_lab)  
+    #hist5.Fill(E_D_lab, E_C_lab)  
  
     """
     Prvo gledamo je li detektirana čestica C jer je to 6Li, a njih ima manje nego 4He

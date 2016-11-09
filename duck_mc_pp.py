@@ -59,7 +59,7 @@ def duck_mc_experiment(E_12, broj_ponavljanja, postav_index):
 
 
 
-BROJ_RADILICA = 1
+BROJ_RADILICA = 10
 
 job_server = pp.Server(secret='ZekoPeko&%!', ncpus=BROJ_RADILICA)
 print "Starting pp with", job_server.get_ncpus(), "workers"
@@ -70,7 +70,7 @@ MIJENJAMO ENERGIJU E_12 OD 0 DO E_MAX_REL
 E_12 - energija iznad praga koji je potreban za raspad X -> C + D
 """
 E_MAX_REL = 35.0
-E_12_STEP = 5.
+E_12_STEP = 1.
 E_12 = 0. 
 BROJ_PONAVLJANJA = 10000
 #BROJ_PONAVLJANJA = 1000
@@ -93,7 +93,7 @@ while E_12 <= E_MAX_REL:
 
 
 bufsize = 1
-target = open("Monte-Carlo-elasticno-postav1.txt", "w", bufsize)
+target = open("Monte-Carlo-elasticno-postav1.csv", "w", bufsize)
 
 # dohvacamo rezultate analiza
 for job in jobs:
