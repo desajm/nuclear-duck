@@ -16,6 +16,8 @@ import numpy as np
 from duck import spher_2_cart, cart_2_spher
 from duck_geometry_np import initialize_detector, initialize_particle, is_particle_geometrically_detected
 
+np.seterr(all='raise')
+
 """
 hist1 = TH2F('hist1', 'E(10B) - theta(10B)' ,1024, -10, 190, 1024, -10, 90)
 hist1.SetOption("COLZ")
@@ -114,7 +116,11 @@ def is_2particle_event_detected(detectors, theta_X, phi_X, Q_1, E_12, E_p, m_p, 
     """   
         
     a_X = np.sqrt(m_X * m_p * E_p)/(m_t + m_p)
-    E_X_lab = E_X + 2.0 * np.sqrt(E_X) * a_X * np.cos(theta_X) + a_X * a_X
+    try:
+    	E_X_lab = E_X + 2.0 * np.sqrt(E_X) * a_X * np.cos(theta_X) + a_X * a_X
+    except:
+	print "Unexpected error", E_X, theta_X
+	raise	
     v_X_iznos_lab = np.sqrt(2.0 * E_X_lab / m_X)
         
     theta_X_lab =  np.arccos((np.sqrt(E_X) * np.cos(theta_X) + a_X) / (np.sqrt(E_X + 2.0 * np.sqrt(E_X) * a_X * np.cos(theta_X) + a_X * a_X)))       
@@ -313,7 +319,7 @@ def calculate_event_detection_E12(detectors, E_12, BROJ_PONAVLJANJA, **kwargs):
     for i in range(num_det):
         for j in range(num_det):
             log_line += ", %d"%(broj_detektiranih_cestica[i][j])
-    print log_line
+    #print log_line
     return log_line
 
 
@@ -368,14 +374,15 @@ if __name__ == '__main__':
    
     
     BROJ_PONAVLJANJA = 10000
-    E_MAX_REL = 30.0
-    E_12_STEP = 10
-    E_12 = 0. 
+    E_MAX_REL = 32.0
+    E_12_STEP = 1
+    E_12 = 32. 
     
 
 
     while E_12 <= E_MAX_REL:
-        calculate_event_detection_E12(detectors, E_12, BROJ_PONAVLJANJA, **kwargs)
+        result = calculate_event_detection_E12(detectors, E_12, BROJ_PONAVLJANJA, **kwargs)
+	print result
         E_12 += E_12_STEP
     
     

@@ -59,7 +59,7 @@ def duck_mc_experiment(E_12, broj_ponavljanja, postav_index):
 
 
 
-BROJ_RADILICA = 10
+BROJ_RADILICA = 30
 
 job_server = pp.Server(secret='ZekoPeko&%!', ncpus=BROJ_RADILICA)
 print "Starting pp with", job_server.get_ncpus(), "workers"
