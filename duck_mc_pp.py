@@ -24,8 +24,7 @@ def duck_mc_experiment(E_12, broj_ponavljanja, postav_index):
     """ PRVI SLUČAJ: 10B + 10B -> 10B + 10B -> 6Li + 4He + 10B
     """  
     
-    postav_index = 'postav_1'
-   
+    postav_index = 'postav_3'
 
     kwargs = {
         "E_p": 72.132,
@@ -35,16 +34,12 @@ def duck_mc_experiment(E_12, broj_ponavljanja, postav_index):
         "m_E": 10.,
         "m_C": 6.,
         "m_D": 4.,
-        "Q_01": 7.151, # Q_0 za reakciju 1
-        "E_prag": 11.6125,
+        "Q_01": 0., # Q_0 za reakciju 1
+        "E_prag": 4.461,
         "Emin_C": [17.5, 18.0, 16.6, 16.2], #za det na 0st
         "Emin_D": [9.4, 9.7, 8.9, 8.7],
-        #"Emin_C": [21.6, 19.0, 17.5, 19.9], #za det na najvisem kutu postav 1 (rub detektora)
-        #"Emin_D": [11.5, 10.1, 9.3, 10.6], #za det na najvisem kutu postav 1 (rub detektora)
-       # "Emin_C": [20.0, 18.3, 16.8, 18.5], #za det na najmanjem kutu postav 1 (rub detektora)
-        #"Emin_D": [10.7, 9.8, 9.0, 9.9], #za det na najmanjem kutu postav 1 (rub detektora)
     }
-    
+
     
     detectors = [duck_mc.define_detector(POSTAV, i, postav_index) for i in range(4)]
         
@@ -69,13 +64,13 @@ jobs = []
 MIJENJAMO ENERGIJU E_12 OD 0 DO E_MAX_REL
 E_12 - energija iznad praga koji je potreban za raspad X -> C + D
 """
-E_MAX_REL = 35.0
-E_12_STEP = 1.
+E_MAX_REL = 30.0
+E_12_STEP = 0.05
 E_12 = 0. 
-BROJ_PONAVLJANJA = 10000
-#BROJ_PONAVLJANJA = 1000
+BROJ_PONAVLJANJA = 10000000
+#BROJ_PONAVLJANJA = 100000
 
-POSTAV = 'postav_1'
+POSTAV = 'postav_3'
 
 while E_12 <= E_MAX_REL:
 
@@ -93,7 +88,7 @@ while E_12 <= E_MAX_REL:
 
 
 bufsize = 1
-target = open("Monte-Carlo-elasticno-postav1.csv", "w", bufsize)
+target = open("Monte-Carlo-elasticno-postav3-10M.csv", "w", bufsize)
 
 # dohvacamo rezultate analiza
 for job in jobs:
