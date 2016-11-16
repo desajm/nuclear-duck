@@ -15,6 +15,7 @@ Created on Thu May 21 21:27:25 2015
 import numpy as np
 from duck import spher_2_cart, cart_2_spher
 from duck_geometry_np import initialize_detector, initialize_particle, is_particle_geometrically_detected
+from datetime import datetime
 
 np.seterr(all='raise')
 
@@ -315,7 +316,7 @@ def calculate_event_detection_E12(detectors, E_12, BROJ_PONAVLJANJA, **kwargs):
 
     """ logiramo broj detektiranih cestica za zadani E_pob
     """
-    log_line = "statistika, %f, %f" % (E_12, E_pob)    
+    log_line = "%s, %f, %f" % (str(datetime.now()), E_12, E_pob)    
     for i in range(num_det):
         for j in range(num_det):
             log_line += ", %d"%(broj_detektiranih_cestica[i][j])
