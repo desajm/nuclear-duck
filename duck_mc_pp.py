@@ -16,6 +16,7 @@ input:
     experiment module - python skripta koja vrti jednu iteraciju eksperimenta
     output_file - gdje se zapisuju rezultati
     number_of_workers - broj procesa koji ce raditi u paraleli
+    e.g. python duck_mc_pp.py experiment_10B10B mc-results-10B10B-postav1.csv 2
 """
 
 parser = argparse.ArgumentParser(description='Run Monte Carlo Experiments in Parallel')
@@ -56,7 +57,7 @@ while E_12 <= expmod.E_12_STOP:
                         expmod.duck_mc_experiment, 
                         (E_12, expmod.BROJ_PONAVLJANJA, expmod.POSTAV_INDEX), 
                         (), 
-                        ('duck_mc',))
+                        (expmod.DEPENDENCY_MODULE,))
     jobs.append(job)
     
     """

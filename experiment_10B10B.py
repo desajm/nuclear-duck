@@ -1,5 +1,6 @@
 import duck_mc
 
+DEPENDENCY_MODULE = 'duck_mc'
 
 POSTAV_INDEX = 'postav_1'
 
