@@ -2,9 +2,9 @@ DEPENDENCY_MODULE = 'duck_mc_3alphas'
 
 E_12_START = 0. 
 E_12_STOP = 30.0
-E_12_STEP = 1.
+E_12_STEP = 0.1
 
-BROJ_PONAVLJANJA = 1000
+BROJ_PONAVLJANJA = 1000000
 
 def duck_mc_experiment(E_12, broj_ponavljanja, postav_index):
     """ postavke detektora na BoBo eksperimentu
