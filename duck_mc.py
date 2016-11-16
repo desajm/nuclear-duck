@@ -5,33 +5,11 @@ Created on Fri Nov  4 09:35:29 2016
 @author: desa
 """
 
-# -*- coding: utf-8 -*-
-"""
-Created on Thu May 21 21:27:25 2015
-
-@author: desa
-"""
-#from ROOT import *
+from ROOT import *
 import numpy as np
 from duck import spher_2_cart, cart_2_spher
 from duck_geometry_np import initialize_detector, initialize_particle, is_particle_geometrically_detected
 from datetime import datetime
-
-np.seterr(all='raise')
-
-"""
-hist1 = TH2F('hist1', 'E(10B) - theta(10B)' ,1024, -10, 190, 1024, -10, 90)
-hist1.SetOption("COLZ")
-hist2 = TH2F('hist2', 'E(6Li) - theta(6Li)' ,1024, -10, 190, 1024, -10, 90)
-hist2.SetOption("COLZ")
-hist3 = TH2F('hist3', 'phi(6Li) - phi(4He)', 1024, -200, 200, 1024, -200, 200)
-hist3.SetOption("COLZ")
-hist4 = TH2F('hist3', 'theta(10B) - theta(10B)', 1024, -20, 200, 1024, -20, 200)
-hist4.SetOption("COLZ")
-hist5 = TH2F('hist1', 'E(6Li) - E(4He)' ,1024, -10, 90, 1024, -10, 90)
-hist5.SetOption("COLZ")
-"""
-
 
 
 def define_detector(POSTAV, i, postav_key):
@@ -180,9 +158,6 @@ def is_2particle_event_detected(detectors, theta_X, phi_X, Q_1, E_12, E_p, m_p, 
     v_D_iznos = np.sqrt(2 * E_D / m_D)
     v_D_cart = spher_2_cart(v_D_iznos, theta_D, phi_D)
     
-    #print "v_D_cart", v_D_cart
-    
-    #print  "theta_D, phi_D", np.rad2deg(theta_D), np.rad2deg(phi_D)
     """
     TRANSFORMACIJA IZ SUSTAVA U KOJEM X MIRUJE U LABORATORIJSKI SUSTAV
     """
@@ -194,9 +169,7 @@ def is_2particle_event_detected(detectors, theta_X, phi_X, Q_1, E_12, E_p, m_p, 
         
     v_C_lab_spher =  cart_2_spher(v_C_lab_cart[0], v_C_lab_cart[1], v_C_lab_cart[2])      
         
-    #print "thetaC_lab, phiC_lab", np.rad2deg(v_C_lab_spher[1]), np.rad2deg(v_C_lab_spher[2])
-    #hist2.Fill(np.rad2deg(v_C_lab_spher[1]), E_C_lab)  
-    
+   
     """
     PARAMETRI KOJI NAM TREBAJU SU E_C_lab, theta_C_lab, phi_C_lab
                                       E_D_lab, theta_D_lab, phi_D_lab    
@@ -213,15 +186,7 @@ def is_2particle_event_detected(detectors, theta_X, phi_X, Q_1, E_12, E_p, m_p, 
             
     v_D_lab_spher =  cart_2_spher(v_D_lab_cart[0], v_D_lab_cart[1], v_D_lab_cart[2]) 
 
-   
-    #print "thetaD_lab, phiD_lab", np.rad2deg(v_D_lab_spher[1]), np.rad2deg(v_D_lab_spher[2])     
-    
-    #hist1.Fill(np.rad2deg(theta_X_lab), E_X_lab)
-    #hist3.Fill(np.rad2deg(v_D_lab_spher[2]), np.rad2deg(v_C_lab_spher[2])) 
-    #hist3.Fill(np.rad2deg(phi_X_lab), np.rad2deg(phi_E_lab))
-    
-    #hist5.Fill(E_D_lab, E_C_lab)  
- 
+
     """
     Prvo gledamo je li detektirana čestica C jer je to 6Li, a njih ima manje nego 4He
     Ako jest, onda gledamo je li detektirana 4He
@@ -297,15 +262,11 @@ def calculate_event_detection_E12(detectors, E_12, BROJ_PONAVLJANJA, **kwargs):
         theta_X = get_random_theta()
         phi_X = get_random_phi()
         
-        #print ""
-        #print "theta_X, phi_X", np.rad2deg(theta_X), np.rad2deg(phi_X)
-        
 
         """ ako su i C i D detektirane
         onda povecamo brojac detektiranih cestica
         """
         ind_detected = is_2particle_event_detected(detectors, theta_X, phi_X, Q_1, E_12, **kwargs)
-        #ind_detected = is_2particle_event_detected(detectors, theta_X, phi_X, Q_1, E_12, E_p, m_p, m_t, m_X, m_E, m_C, m_D, Emin_C, Emin_D)
         if not ind_detected:
             continue
 
@@ -320,7 +281,6 @@ def calculate_event_detection_E12(detectors, E_12, BROJ_PONAVLJANJA, **kwargs):
     for i in range(num_det):
         for j in range(num_det):
             log_line += ", %d"%(broj_detektiranih_cestica[i][j])
-    #print log_line
     return log_line
 
 
