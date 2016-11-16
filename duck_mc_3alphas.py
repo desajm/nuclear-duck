@@ -1,36 +1,9 @@
-"""
-Created on Fri Nov  4 09:35:29 2016
-
-@author: desa
 # -*- coding: utf-8 -*-
-"""
-Created on Thu May 21 21:27:25 2015
 
-@author: desa
-"""
-from ROOT import *
 import numpy as np
+from datetime import datetime
 from duck import spher_2_cart, cart_2_spher
 from duck_geometry_np import initialize_detector, initialize_particle, is_particle_geometrically_detected
-
-hist0 = TH2F('hist1', 'E(8Be) - theta(8Be)' ,1024, -10, 190, 1024, -10, 90)
-hist0.SetOption("COLZ")
-hist7 = TH2F('hist1', 'E(12C) - theta(12C)' ,1024, -10, 190, 1024, -10, 90)
-hist7.SetOption("COLZ")
-hist1 = TH2F('hist1', 'E(4He_1) - theta(4He_1)' ,1024, -10, 190, 1024, -10, 90)
-hist1.SetOption("COLZ")
-hist2 = TH2F('hist2', 'E(4He_2) - theta(4He_2)' ,1024, -10, 190, 1024, -10, 90)
-hist2.SetOption("COLZ")
-hist3 = TH2F('hist2', 'E(4He_3) - theta(4He_3)' ,1024, -10, 190, 1024, -10, 90)
-hist3.SetOption("COLZ")
-hist4 = TH2F('hist3', 'phi(4He_2) - phi(4He_3)', 1024, -200, 200, 1024, -200, 200)
-hist4.SetOption("COLZ")
-hist5 = TH2F('hist3', 'theta(12C) - theta(8Be)', 1024, -20, 200, 1024, -20, 200)
-hist5.SetOption("COLZ")
-hist8 = TH2F('hist3', 'theta(4He_2) - theta(4He_3)', 1024, -20, 200, 1024, -20, 200)
-hist8.SetOption("COLZ")
-hist6 = TH2F('hist1', 'E(4He_2) - E(4He_3)' ,1024, -10, 90, 1024, -10, 90)
-hist6.SetOption("COLZ")
 
 def define_detector(POSTAV, i, postav_key):
     detector = {}
@@ -83,7 +56,7 @@ def is_particle_detected(particle, detectors, min_energies):
     return -1    
 
 
-def is_3particle_event_detected(detectors, theta_X, phi_X, Q_1, E_12, E_p, m_p, m_t, m_X, m_E, m_C, m_D, m_F, m_G, Emin_F, Emin_G, Emin_D):
+def is_3particle_event_detected(detectors, theta_X, phi_X, Q_1, E_12, E_p, m_p, m_t, m_X, m_E, m_C, m_D, m_F, m_G, Emin_F, Emin_G, Emin_D, **kwargs):
     
     E_in = E_p * m_t / (m_t + m_p)
     
@@ -111,7 +84,7 @@ def is_3particle_event_detected(detectors, theta_X, phi_X, Q_1, E_12, E_p, m_p, 
     #print "E_X, E_E", E_X, E_E
             
     """
-    treba nam iznos brzine čestice X u laboratorijskom sustavu. Računamo ga iz E_X_lab
+    treba nam iznos brzine čestice X u laboratorijskom sustavu. Racunamo ga iz E_X_lab
     """   
         
     a_X = np.sqrt(m_X * m_p * E_p)/(m_t + m_p)
@@ -123,9 +96,6 @@ def is_3particle_event_detected(detectors, theta_X, phi_X, Q_1, E_12, E_p, m_p, 
         
     v_X_cart_lab = spher_2_cart(v_X_iznos_lab, theta_X_lab, phi_X_lab)
       
-    #print "thetaX_lab",  np.rad2deg(theta_X_lab)  
-    #print  v_X_cart_lab   
-    #hist7.Fill(np.rad2deg(theta_X_lab), E_X_lab)   
       
       
     a_E = np.sqrt(m_E * m_p * E_p)/(m_t + m_p)
@@ -134,7 +104,6 @@ def is_3particle_event_detected(detectors, theta_X, phi_X, Q_1, E_12, E_p, m_p, 
         
     theta_E_lab =  np.arccos((np.sqrt(E_E) * np.cos(theta_E) + a_E) / (np.sqrt(E_E + 2.0 * np.sqrt(E_E) * a_E * np.cos(theta_E) + a_E * a_E)))       
     phi_E_lab = phi_E
-    hist5.Fill(np.rad2deg(theta_E_lab), np.rad2deg(theta_X_lab))
     
     """
     RASPAD X -> C + D
@@ -188,8 +157,6 @@ def is_3particle_event_detected(detectors, theta_X, phi_X, Q_1, E_12, E_p, m_p, 
         
     v_C_lab_spher =  cart_2_spher(v_C_lab_cart[0], v_C_lab_cart[1], v_C_lab_cart[2])      
         
-    #print "thetaC_lab, phiC_lab", np.rad2deg(v_C_lab_spher[1]), np.rad2deg(v_C_lab_spher[2])
-    #hist0.Fill(np.rad2deg(v_C_lab_spher[1]), E_C_lab)  
     
     
       
@@ -202,13 +169,6 @@ def is_3particle_event_detected(detectors, theta_X, phi_X, Q_1, E_12, E_p, m_p, 
             
     v_D_lab_spher =  cart_2_spher(v_D_lab_cart[0], v_D_lab_cart[1], v_D_lab_cart[2]) 
 
-    #print "thetaD_lab, phiD_lab", np.rad2deg(v_D_lab_spher[1]), np.rad2deg(v_D_lab_spher[2])     
-    #hist1.Fill(np.rad2deg(v_D_lab_spher[1]), E_D_lab)
-    #hist1.Fill(np.rad2deg(theta_X_lab), E_X_lab)
-    #hist8.Fill(np.rad2deg(v_D_lab_spher[1]), np.rad2deg(v_C_lab_spher[1])) 
-    #hist3.Fill(np.rad2deg(v_D_lab_spher[2]), np.rad2deg(v_C_lab_spher[2]))  
-    #hist5.Fill(E_D_lab, E_C_lab)  
-    #hist3.Fill(np.rad2deg(phi_E_lab), np.rad2deg(phi_X_lab))
     """
     Prvo gledamo je li detektirana čestica D, ako jest idemo na sljedeci raspad
     """
@@ -279,7 +239,6 @@ def is_3particle_event_detected(detectors, theta_X, phi_X, Q_1, E_12, E_p, m_p, 
     v_F_lab_spher =  cart_2_spher(v_F_lab_cart[0], v_F_lab_cart[1], v_F_lab_cart[2])   
     
     #print v_C_lab_iznos, v_C_lab_spher[0]
-    #hist2.Fill(np.rad2deg(v_F_lab_spher[1]), E_F_lab)
     
   
     v_G_lab_cart = v_G_cart[0] + v_C_lab_cart[0], v_G_cart[1] + v_C_lab_cart[1], v_G_cart[2] + v_C_lab_cart[2]
@@ -290,10 +249,6 @@ def is_3particle_event_detected(detectors, theta_X, phi_X, Q_1, E_12, E_p, m_p, 
     
     v_G_lab_spher =  cart_2_spher(v_G_lab_cart[0], v_G_lab_cart[1], v_G_lab_cart[2]) 
     
-    #hist3.Fill(np.rad2deg(v_G_lab_spher[1]), E_G_lab)
-    #hist4.Fill(np.rad2deg(v_G_lab_spher[2]), np.rad2deg(v_F_lab_spher[2])) 
-    #hist8.Fill(np.rad2deg(v_G_lab_spher[1]), np.rad2deg(v_F_lab_spher[1]))  
-    #hist6.Fill(E_G_lab, E_F_lab)  
     """
     GLEDAMO JE LI ČESTICE F I G POGAĐAJU DETEKTORE SLOŽENE U POSTAV 1 ILI 2 ILI 3
     """
@@ -361,7 +316,7 @@ def is_3particle_event_detected(detectors, theta_X, phi_X, Q_1, E_12, E_p, m_p, 
     
 
 
-def calculate_event_detection_E12(detectors, E_12, BROJ_PONAVLJANJA, E_prag, Q_01):
+def calculate_event_detection_E12(detectors, E_12, BROJ_PONAVLJANJA, **kwargs):
     """ resetiramo brojac na 0 """
     num_det = 4
     broj_detektiranih_cestica = [[[0 for x in range(num_det)] for y in range(num_det)] for z in range(num_det)]
@@ -379,8 +334,8 @@ def calculate_event_detection_E12(detectors, E_12, BROJ_PONAVLJANJA, E_prag, Q_0
         E_prag - energija praga jezgre X za raspad u kanal C + D
         Q0 - zadajemo ovisno o reakciji koju zelimo promatrati
         """
-        E_pob = E_prag + E_12
-        Q_1 = Q_01 - E_pob
+        E_pob = kwargs['E_prag'] + E_12
+        Q_1 = kwargs['Q_01'] - E_pob
 
         
         """
@@ -401,7 +356,8 @@ def calculate_event_detection_E12(detectors, E_12, BROJ_PONAVLJANJA, E_prag, Q_0
         """ ako su i C i D detektirane
         onda povecamo brojac detektiranih cestica
         """
-        ind_detected = is_3particle_event_detected(detectors, theta_X, phi_X, Q_1, E_12, E_p, m_p, m_t, m_X, m_E, m_C, m_D, m_F, m_G, Emin_F, Emin_G, Emin_D)
+        #ind_detected = is_3particle_event_detected(detectors, theta_X, phi_X, Q_1, E_12, E_p, m_p, m_t, m_X, m_E, m_C, m_D, m_F, m_G, Emin_F, Emin_G, Emin_D)
+        ind_detected = is_3particle_event_detected(detectors, theta_X, phi_X, Q_1, E_12, **kwargs)
         if not ind_detected:
             continue
 
@@ -412,12 +368,11 @@ def calculate_event_detection_E12(detectors, E_12, BROJ_PONAVLJANJA, E_prag, Q_0
 
     """ logiramo broj detektiranih cestica za zadani E_pob
     """
-    log_line = "statistika, %f, %f" % (E_12, E_pob)    
+    log_line = "%s, %f, %f" % (str(datetime.now()), E_12, E_pob)    
     for i in range(num_det):
         for j in range(num_det):
             for k in range(num_det):
                 log_line += ", %d"%(broj_detektiranih_cestica[i][j][k])
-    print log_line
     return log_line
 
 
@@ -440,47 +395,35 @@ if __name__ == '__main__':
         'postav_3': {'distance': [0.35875,0.35675,0.35775,0.35975], 'theta': [46.49, 26.00, 33.00, 53.00], 'phi': [0, 0, 180, 180], 'num_stripes': 16, 'detector_width': 0.05}
         }
     
-        
-    
-    """
-    PRVI KORAK: 10B + 10B -> 12C + 8Be
-    DRUGI KORAK: 10B + 10B -> 12C + 8Be -> 8Be + 4He + 8Be
-    """
-    
-   
-    
-    
-    
     postav_index = 'postav_1'
     detectors = [define_detector(POSTAV, i, postav_index) for i in range(4)]
     
+    kwargs = {
+            "E_p": 72.132,
+            "m_p": 10.,
+            "m_t": 10.,
+            "m_X": 12.,
+            "m_E": 8.,
+            "m_C": 8.,
+            "m_D": 4.,
+            "m_F": 4.,
+            "m_G": 4.,
+            "Q_01": 16.12971, #(za vrh Q1, 19.15971 - 3.03) # Q_0 za reakciju 1
+            "E_prag": 7.3666,
+            "Emin_F": [9.4, 9.7, 8.9, 8.7], #za det na 0st
+            "Emin_G": [9.4, 9.7, 8.9, 8.7],
+            "Emin_D": [9.4, 9.7, 8.9, 8.7],
+            }
     
-    E_p = 72.132
-    m_p = 10.
-    m_t = 10.
-    m_X = 12.
-    m_E = 8.
-    m_C = 8.
-    m_D = 4.
-    m_F = 4.
-    m_G = 4.
-    Q_01 = 16.12971 #(za vrh Q1, 19.15971 - 3.03) # Q_0 za reakciju 1
-    E_prag = 7.3666
-    Emin_F = [9.4, 9.7, 8.9, 8.7] #za det na 0st
-    Emin_G = [9.4, 9.7, 8.9, 8.7]
-    Emin_D = [9.4, 9.7, 8.9, 8.7]
-    
-    BROJ_PONAVLJANJA = 1000000
+    BROJ_PONAVLJANJA = 10000
     E_MAX_REL = 30.0
     E_12_STEP = 1.0
     E_12 = 0. 
 
 
-
-
-
     while E_12 <= E_MAX_REL:
-        calculate_event_detection_E12(detectors, E_12, BROJ_PONAVLJANJA, E_prag, Q_01)
+        result = calculate_event_detection_E12(detectors, E_12, BROJ_PONAVLJANJA, **kwargs)
+        print result
         E_12 += E_12_STEP
     
     

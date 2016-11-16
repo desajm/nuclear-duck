@@ -1,8 +1,4 @@
-import duck_mc
-
 DEPENDENCY_MODULE = 'duck_mc'
-
-POSTAV_INDEX = 'postav_1'
 
 E_12_START = 0. 
 E_12_STOP = 30.0

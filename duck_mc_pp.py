@@ -15,8 +15,9 @@ hendlanje ulaznih argumenata
 input:
     experiment module - python skripta koja vrti jednu iteraciju eksperimenta
     output_file - gdje se zapisuju rezultati
+    detector_setup - oznaka postava detektora: postav_1, postav_2...
     number_of_workers - broj procesa koji ce raditi u paraleli
-    e.g. python duck_mc_pp.py experiment_10B10B mc-results-10B10B-postav1.csv 2
+    e.g. python duck_mc_pp.py experiment_10B10B mc-results-10B10B-postav1.csv postav_1 2
 """
 
 parser = argparse.ArgumentParser(description='Run Monte Carlo Experiments in Parallel')
@@ -24,6 +25,8 @@ parser = argparse.ArgumentParser(description='Run Monte Carlo Experiments in Par
 parser.add_argument('experiment_module', type=str)
 
 parser.add_argument('output_file', type=str)
+
+parser.add_argument('detector_setup', type=str)
 
 parser.add_argument('number_of_workers', default=1, type=int)
 
@@ -55,7 +58,7 @@ while E_12 <= expmod.E_12_STOP:
 
     job = job_server.submit(
                         expmod.duck_mc_experiment, 
-                        (E_12, expmod.BROJ_PONAVLJANJA, expmod.POSTAV_INDEX), 
+                        (E_12, expmod.BROJ_PONAVLJANJA, args.detector_setup), 
                         (), 
                         (expmod.DEPENDENCY_MODULE,))
     jobs.append(job)
