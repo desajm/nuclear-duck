@@ -334,9 +334,9 @@ if __name__ == '__main__':
 
    
     
-    BROJ_PONAVLJANJA = 10000000
+    BROJ_PONAVLJANJA = 1000
     E_MAX_REL = 30.0
-    E_12_STEP = 0.05
+    E_12_STEP = 5
     E_12 = 0. 
     
 
